@@ -1,0 +1,15 @@
+package com.mxw.droolsdemo;
+
+import com.example.droolsdemo.entity.PointDomain;
+
+   rule subBackNumPoint
+       //发生退货，减5分
+       salience 10
+       lock-on-active true
+       when
+           $pointDomain : PointDomain($pointDomain.getBackNums() >= 1 )
+       then
+           $pointDomain.setPoint($pointDomain.getPoint() - 5);
+           $pointDomain.recordPointLog($pointDomain.getUsername(),"subBackNumPoint",-5);
+           System.out.println("退货次数规则通过");
+   end

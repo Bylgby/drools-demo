@@ -1,0 +1,31 @@
+package com.mxw.droolsdemo;
+
+import com.example.droolsdemo.entity.PointDomain;
+import com.example.droolsdemo.util.R;
+
+ rule birthdayPoint
+    //过生日，加100积分
+    salience 100
+    lock-on-active true
+    when
+        $pointDomain : PointDomain($pointDomain.getBirthday() == true)
+        $r : R()
+    then
+        System.out.println("生日规则开始");
+        $pointDomain.setPoint($pointDomain.getPoint()+100);
+        $pointDomain.recordPointLog($pointDomain.getUsername(),"birthdayPoint",100);
+        $r.setCode(30);
+        System.out.println($r.getCode());
+        System.out.println("生日规则通过");
+ end
+
+ rule buyNumsPoint
+    salience 99
+    lock-on-active true
+    when
+       $pointDomain : PointDomain($pointDomain.getBuyNums() >= 5 && $pointDomain.getBuyMoney() >= 1000)
+    then
+        $pointDomain.setPoint($pointDomain.getPoint()+10);
+        $pointDomain.recordPointLog($pointDomain.getUsername(),"buyNumsPoint",10);
+        System.out.println("购买次数规则通过");
+ end
